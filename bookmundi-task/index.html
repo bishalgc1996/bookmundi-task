@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Library Test</title>
+  </head>
+  <body>
+    <div class="my-element" data-foo="bar">Element 1</div>
+    <div class="my-element" data-foo="baz">Element 2</div>
+    <div class="my-element" data-foo="qux">Element 3</div>
+    <div class="my-parent">
+      <p>This is an existing paragraph.</p>
+    </div>
+    <input id="myInput" type="text" />
+    <br /><br />
+    <label> <input id="myCheckbox" type="checkbox" /> Check me </label>
+    <br /><br />
+    <select id="mySelect">
+      <option value="">Select an option</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+
+    <span id="my-span">Some text to copy</span>
+    <button onclick="copyToClipboard()">Copy to clipboard</button>
+
+    <input type="text" id="my-input" />
+    <p id="my-output"></p>
+
+    <script src="index.js"></script>
+    <script src="request.js"></script>
+    <script>
+      const input = document.getElementById('my-input');
+      const output = document.getElementById('my-output');
+
+      // Initialize the data model
+      let data = { text: '' };
+
+      // Update the UI with the initial data
+      input.value = data.text;
+      output.innerText = data.text;
+
+      // Add an event listener to the input element
+      input.addEventListener('input', () => {
+        // Update the data model with the new text
+        data.text = input.value;
+
+        // Update the output element with the new text
+        output.innerText = data.text;
+      });
+
+      function copyToClipboard() {
+        // Get the text from the SPAN element
+        const spanText = document.getElementById('my-span').innerText;
+
+        // Create a temporary input element
+        const tempInput = document.createElement('input');
+        tempInput.setAttribute('type', 'text');
+        tempInput.setAttribute('value', spanText);
+        document.body.appendChild(tempInput);
+
+        // Select the text in the input element
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the selected text to the clipboard
+        document.execCommand('copy');
+
+        // Remove the temporary input element
+        document.body.removeChild(tempInput);
+
+        // Notify the user that the text has been copied
+        alert('Text copied to clipboard: ' + spanText);
+      }
+
+      myLibrary.changeClass('.my-element', 'new-class');
+      var value = myLibrary.get('.new-class', 'foo');
+      console.log(value); // Output: "bar"
+      var values = myLibrary.getAll('.new-class', 'foo');
+      console.log(values); // Output: ["bar", "baz", "qux"]
+      myLibrary.inject('.my-parent', 'p', 'This is a new paragraph.');
+
+      myLibrary.set('#myInput', 'hello world');
+      var value1 = myLibrary.getnext('#myInput');
+      console.log(value1);
+
+      myLibrary.set('#myCheckbox', true);
+      var value2 = myLibrary.getnext('#myCheckbox');
+      console.log(value2);
+
+      myLibrary.set('#mySelect', 'option2');
+      var value3 = myLibrary.getnext('#mySelect');
+      console.log(value3);
+
+      myLibrary
+        .makeGetRequest('/posts/1')
+        .then(function (response) {
+          console.log('User ID: ' + response.userId);
+          console.log('Title: ' + response.title);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>
